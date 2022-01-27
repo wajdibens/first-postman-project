@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "d439f902-a126-42b9-a61d-7117a866b64c",
+		"name": "google books",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List books",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//1.Vérification de la réussite de la requête et qu’elle renvoie un status code égale a 200 ok \r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//2.Vérification de la réponse (envoyer une recherche « les misérables » et avoir ce livre visible dans la réponse)\r",
+							"\r",
+							"pm.test(\"vérifier la présence du livre les misérables dans la réponse\", function(){\r",
+							"const response = pm.response.json();\r",
+							"pm.expect(response.items[0].volumeInfo.title).to.be.include(\"Les Misérables\");\r",
+							"});\r",
+							"\r",
+							"//3.Vérification de la réponse (envoyer une recherche « les misérables » et avoir ce livre visible en premier rang)\r",
+							"\r",
+							"pm.test(\"Vérifier la présence du livre Les misérables en premier rang\", function(){\r",
+							"const response = pm.response.json();\r",
+							"pm.expect(response.items[0].volumeInfo.title).to.be.include(\"Les Misérables\");\r",
+							"});\r",
+							"\r",
+							"//4.Vérification que le total des livres renvoyés soit supérieur à 0 (totalItems diffèrent de 0)\r",
+							"\r",
+							"pm.test(\"Vérifier que le total des livres renvoyés est supérieur à 0\", function()  {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.totalItems).to.have.greaterThan (0);\r",
+							"});\r",
+							"\r",
+							"//5.Vérification que le livre « les misérables » a bien un ID\r",
+							"\r",
+							"pm.test(\"Vérifier que le livre « les misérables » a bien un ID\", function() {\r",
+							"const response = pm.response.json();\r",
+							"pm.expect(response.items[0].id).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"//6.Vérification du paramètre maxResults (envoyer une requête avec 4 ouvrages et voir le résultat obtenu)\r",
+							"\r",
+							"pm.test(\"Vérifier que le paramètre maxResults renvoye le nombre demandé au moment de la requête\", function() {\r",
+							"const response = pm.response.json();\r",
+							"pm.expect(response.items.length).to.be.equal(4);\r",
+							"});\r",
+							"\r",
+							"//7.Vérification que les items ne sont pas nuls\r",
+							"\r",
+							"pm.test(\"Vérifier que les items ne sont pas nuls\", function(){\r",
+							"const response = pm.response.json();\r",
+							"pm.expect(response.items[0].kind).to.be.include(\"books#volume\");\r",
+							"pm.expect(response.items[0].id).to.not.be.null;\r",
+							"pm.expect(response.items[0].etag).to.not.be.null;\r",
+							"pm.expect(response.items[0].selfLink).to.not.be.null;\r",
+							"pm.expect(response.items[0].volumeInfo.title).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"//8.Vérification de l’ID de livre\r",
+							"\r",
+							"pm.test(\"Vérifir que l’ID de livre\", function() {\r",
+							"    const response = pm.response.json()\r",
+							"const idLivre = response.items[0].id\r",
+							"pm.collectionVariables.set(\"idLivre\",idLivre)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}?q=les misérables&maxResults=4",
+					"host": [
+						"{{URL}}"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "les misérables"
+						},
+						{
+							"key": "maxResults",
+							"value": "4"
+						}
+					]
+				},
+				"description": "**Cas de test pour la requête List books :**\n\n1.Vérification de la réussite de la requête et qu’elle renvoie un status code égale a 200 ok.\n\n2.Vérification de la réponse (envoyer une recherche « les misérables » et avoir ce livre visible dans la réponse).\n\n3.Vérification de la réponse (envoyer une recherche « les misérables » et avoir ce livre visible en premier rang).\n\n4.Vérification que le total des livres renvoyés soit supérieur à 0 (totalItems diffèrent de 0).\n\n5.Vérification que le livre « les misérables » a bien un ID.\n\n6.Vérification du paramètre maxResults (envoyer une requête avec 4 ouvrages et voir le résultat obtenu).\n\n7.Vérification que les items ne sont pas nuls.\n\n8.Vérification de l’ID de livre"
+			},
+			"response": []
+		},
+		{
+			"name": "Get book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//1.Vérification de la réussite de la requête et qu’elle renvoie un status code 200 ok\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//2.Vérification de l’ID de livre\r",
+							"\r",
+							"pm.test(\"Vérifir que l’ID de livre\", function() {\r",
+							"    const response = pm.response.json()\r",
+							"const idLivre = response.items[0].id\r",
+							"pm.collectionVariables.set(\"idLivre\",idLivre)\r",
+							"});\r",
+							"\r",
+							"//3.Vérification de l’auteur (auteur= Victor Hugo)\r",
+							"\r",
+							"pm.test(\"Vérifir que l'auteur est Victor Hugo\", function(){\r",
+							"const response = pm.response.json();\r",
+							"pm.expect(response.items[0].volumeInfo.authors).to.be.include(\"Victor Hugo\");\r",
+							"});\r",
+							"\r",
+							"//4.Vérification que le total des livres renvoyés soit supérieur à 0 (totalItems diffèrent de 0)\r",
+							"\r",
+							"pm.test(\"Vérifier que le total des livres renvoyés est supérieur à 0\", function()  {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.totalItems).to.have.greaterThan (0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}?q={{idLivre}}",
+					"host": [
+						"{{URL}}"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "{{idLivre}}"
+						},
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				},
+				"description": "**Cas de test pour la requête Get book :**\n\n1.Vérification de la réussite de la requête et qu’elle renvoie un code 200 et statut ok\n\n2.Vérification de l’ID de livre (id= FNrAoQEACAAJ)\n\n3.Vérification de l’auteur (auteur= Victor Hugo)\n\n4.Vérification que le total des livres (totalItems) renvoyés soit supérieur à 0"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "https://www.googleapis.com/books/v1/volumes",
+			"type": "default"
+		},
+		{
+			"key": "idLivre",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow-y: scroll;">
+<head>
+  <meta charset="UTF-8">
+  <title>Newman Summary Report</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+
+<style>
+code.renderMarkdown table, code.renderMarkdown th, code.renderMarkdown td {
+    border: 1px solid black;
+    width: max-content;
+    padding: .75rem;
+}
+
+.theme-dark {
+    --background-color: #222;
+    --bg-card-deck: #444444;
+    --text-color: #ccd2d8;
+    --tab-border: solid 1px #444;
+    --success: #3c9372;
+    --failure: #c24a3f;
+    --warning: #d28c23;
+    --info: #4083b6;
+    --badge-outline: #3c9372;
+    --badge-bg: #cdd3db;
+    --badge-text: #ccd2d9;
+    --failure-row: #c24a3f;
+    --warning-row: #d28c23;
+    --card-bg: #444;
+    --card-footer: #4f5758;
+    --form-input: #ececb5;
+    --hov-text: #d2dae5;
+    --h4-text: #ccd1d9;
+}
+
+.theme-light {
+    --tab-border: solid 1px #fff;
+    --text-color: #000000;
+    --success: #42a745;
+    --failure: #dc3544;
+    --warning: #f4c10b;
+    --info: #49a1b8;
+    --badge-outline: #040411;
+    --badge-bg: #f8f9fa;
+    --badge-text: #fff;
+    --failure-row: #f5c6cb;
+    --warning-row: #ffeeba;
+    --card-bg: #f7f7f7;
+    --hov-text: #fff;
+    --h4-text: #ffffff;
+}
+
+body {
+  padding-top:30px;
+  background-color: var(--background-color)!important;
+  color: var(--text-color);
+}
+
+#execution-data {
+  padding: 10px;
+  border: var(--tab-border);
+  border-top: none;
+}
+
+.nav-tabs {
+  padding-top: 10px;
+  height: 105px;
+  overflow-y: auto;
+}
+
+body.theme-dark .card-header {
+    background-color: #444;
+}
+
+body.theme-light .card-header {
+    background-color: #f7f7f7;
+}
+
+.card-footer {
+    padding: .75rem 1.25rem;
+    background-color: var(--card-footer);
+}
+
+.card-deck {
+    background-color: var(--bg-card-deck)!important;
+}
+.form-control {
+    background: var(--form-input);
+}
+
+.custom-tab {
+  padding: 10px 15px;
+  margin-right: 0px;
+  height: 47px;
+  width: 69px;
+  text-align: center;
+  border: var(--tab-border);
+  border-bottom: none;
+  cursor:pointer;
+}
+
+body.theme-dark .text-white {
+    color: #ccd2d9!important;
+}
+h4 {
+    color: var(--h4-text);
+}
+
+body.theme-dark h1 {
+    color: #ccd2da;
+}
+
+body.theme-dark .bg-light>td {
+    background: #4f5858!important;
+}
+
+body.theme-dark .hljs {
+    background: #0a0a0ab0!important;
+    color: #8d8787!important;
+}
+
+.bg-info {
+    background-color: var(--info)!important;
+}
+.bg-success {
+    background-color: var(--success)!important;
+}
+
+.alert-success {
+    background-color: var(--success)!important;
+}
+
+.alert-warning {
+    background-color: var(--warning)!important;
+}
+
+.alert-info {
+    background-color: var(--info)!important;
+}
+
+.bg-warning {
+    background-color: var(--warning)!important;
+}
+
+.badge-warning {
+    color: var(--badge-text)!important;
+    background-color: var(--warning)!important;
+}
+
+.table-warning>td {
+    background-color: var(--warning-row);
+}
+
+.alert-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .alert-dark {
+    background-color: #636467!important;
+}
+
+body.theme-dark .text-dark {
+    color: #d1dae4!important;
+}
+
+body.theme-dark .badge-light {
+    color: #212529;
+    background-color: #cdd3db;
+}
+
+body.theme-light .badge-light {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+body.theme-light .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.table-danger>td {
+    background-color: var(--failure-row);
+}
+
+body.theme-dark .table .thead-light th {
+    background-color: #4f5858!important;
+    border-color: #dee2e6!important;
+    color: #ccd2d8!important;
+}
+
+.itPassed {
+  background: var(--success);
+  color: white;
+}
+.itFailed {
+  background: var(--failure);
+  color: white;
+}
+
+.resultsInfoPass {
+  color: var(--success);
+  padding-top: 4px;
+}
+
+.resultsInfoFail {
+  color: var(--failure);
+  padding-top: 4px;
+}
+
+.badge-outline-success {
+  color: var(--success);
+  border: 1px solid var(--success);
+  background-color: transparent;
+}
+
+.badge-outline {
+  color: var(--badge-outline);
+  border: 1px solid var(--badge-outline);
+  background-color: transparent;
+}
+
+.btn-outline-success {
+    color: var(--success)!important;
+    border-color: var(--success)!important;
+}
+
+.backToTop:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-success:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-secondary {
+  background-color: var(--success)!important;
+  color: var(--hov-text)!important;
+}
+
+body.theme-dark .env-heading {
+    color: #ccd2d9!important;
+}
+
+body, html {
+  height:100%;
+}
+
+.card {
+  overflow:hidden;
+}
+
+body.theme-dark .card-body {
+    background-color: #444;
+}
+
+body.theme-light .card-body {
+    background-color: #f7f7f7;
+}
+
+body.theme-dark .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-light .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.card-body .rotate {
+  z-index: 8;
+  float: right;
+  height: 100%;
+}
+
+.card-body .rotate i {
+  color: #14141426;
+  position: absolute;
+  left: 0;
+  left: auto;
+  right: -10px;
+  bottom: 0;
+  display: block;
+  -webkit-transform: rotate(-44deg);
+  -moz-transform: rotate(-44deg);
+  -o-transform: rotate(-44deg);
+  -ms-transform: rotate(-44deg);
+  transform: rotate(-44deg);
+}
+
+.dyn-height {
+  max-height:350px;
+  overflow-y:auto;
+}
+
+.nav-pills .nav-link.active {
+  background-color: transparent!important;
+}
+
+.backToTop {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 99;
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.card-header .fa {
+  transition: .3s transform ease-in-out;
+}
+.card-header .collapsed .fa {
+  transform: rotate(90deg);
+}
+
+.single-line-tabs {
+  padding-top: 10px;
+  height: 60px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 0px;
+  bottom: 4px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  box-shadow: 0 0px 15px #2020203d;
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+input:checked + .slider {
+  background-color: #4083b6;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #4083b6;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(24px);
+  -ms-transform: translateX(24px);
+  transform: translateX(24px);
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+table.dataTable td, table.dataTable tr {
+    vertical-align: middle;
+} 
+
+body.theme-dark code {
+    color: #ccd2d8!important;
+} 
+
+body.theme-light code {
+    color: #000000!important;
+} 
+
+</style>
+</head>
+<body class="">
+  <div class="container">
+        <div class="container">
+            <label>Light</label>
+            <label id="switch" class="switch">
+                <input type="checkbox" onchange="toggleTheme()" id="slider">
+                <span class="slider round"></span>
+            </label>
+            <label>Dark</label>
+        </div>
+        <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+            <li class="nav-item bg-info active" data-toggle="tooltip" title="Click to view the Summary">
+                <a class="nav-link text-white" id="pills-summary-tab" data-toggle="pill" href="#pills-summary" role="tab" aria-controls="pills-summary" aria-selected="true">Summary</a>
+            </li>
+            <li class="nav-item bg-success" data-toggle="tooltip" title="Click to view the Requests">
+                <a class="nav-link text-white" id="pills-requests-tab" data-toggle="pill" href="#pills-requests" role="tab" aria-controls="pills-requests" aria-selected="false">Total Requests <span class="badge badge-light">2</span></a>
+            </li>
+            <li class="nav-item bg-danger" data-toggle="tooltip" title="Click to view the Failed Tests">
+                <a class="nav-link text-white" id="pills-failed-tab" data-toggle="pill" href="#pills-failed" role="tab" aria-controls="pills-failed" aria-selected="false">Failed Tests <span class="badge badge-light">0</span></a>
+            </li>
+            <li class="nav-item bg-warning" data-toggle="tooltip" title="Click to view the Skipped Tests">
+                <a class="nav-link text-white" id="pills-skipped-tab" data-toggle="pill" href="#pills-skipped" role="tab" aria-controls="pills-skipped" aria-selected="false">Skipped Tests <span class="badge badge-light">0</span></a>
+            </li>
+            </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-summary" role="tabcard" aria-labelledby="pills-summary-tab">
+<div class="row">
+  <div class="col-md-9 col-lg-12 main">
+   <h1 class="display-2 text-center">Newman Run Dashboard</h1>
+   <h5 class="text-center">Thursday, 27 January 2022 20:08:42</h5>
+   <div class="row">
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-success">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-retweet fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Iterations</h6>
+       <h1 class="display-1">1</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-danger">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-list fa-4x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Assertions</h6>
+       <h1 class="display-1">12</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-info">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-plus-circle fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Failed Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-warning">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-share fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Skipped Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+   </div>
+   <hr>
+    <div class="row">
+    <div class="col">
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">File Information</h5>
+                <span><i class="fas fa-file-code"></i></span><strong> Collection:</strong> google books<br>
+                
+                
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">Timings and Data</h5>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Total run duration:</strong> 1828ms<br>
+                <span><i class="fas fa-database"></i></span><strong> Total data received:</strong> 18.58KB<br>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Average response time:</strong> 762ms<br>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-inverse">
+                    <tr class="text-center">
+                        <th class="text-uppercase">Summary Item</th>
+                        <th class="text-uppercase">Total</th>
+                        <th class="text-uppercase">Failed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Requests</td>
+                        <td class="text-center">2</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Prerequest Scripts</td>
+                        <td class="text-center">3</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Test Scripts</td>
+                        <td class="text-center">4</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Assertions</td>
+                        <td class="text-center">12</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Skipped Tests</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">-</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+    <hr>
+   </div>
+   </div>
+  </div>
+ </div>
+        </div>
+            <div class="tab-pane fade" id="pills-failed" role="tabcard" aria-labelledby="pills-failed-tab">
+                <button id="topOfFailuresScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+                
+                <div class="alert alert-success text-uppercase text-center">
+                     <br><br><h1 class="text-center">There are no failed tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-skipped" role="tabcard" aria-labelledby="pills-skipped-tab">
+                <button id="topOfSkippedScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                    <br><br><h1 class="text-center">There are no skipped tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-requests" role="tabcard" aria-labelledby="pills-requests-tab">
+
+            <button id="topOfRequestsScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+            
+            <div class="btn-group float-right" role="group" aria-label="Button Group">
+                <button id="openAll" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Folders</button>
+                <button id="openAllRequests" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Requests</button>
+            </div>
+
+    <div class="text-uppercase" id="execution-menu">
+        <h5>1 Iteration available to view</h5>
+        
+        <nav class="table-responsive">
+        <ul class="nav single-line-tabs" id="iterationList">
+        </ul>
+        </nav>
+    </div>
+    <h6 class="text-uppercase text-muted" id="iterationSelected" style="padding-top: 10px;"></h6>
+	<div class="tab-content" id="execution-data">
+            <div id="folder-d3c3265e-867f-4d4f-b93b-6ce6028a9a73" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-d3c3265e-867f-4d4f-b93b-6ce6028a9a73" aria-expanded="false" aria-controls="collapse" id="requests-d3c3265e-867f-4d4f-b93b-6ce6028a9a73" class="collapsed text-white z-block">
+                    Iteration: 1 - List books <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-d3c3265e-867f-4d4f-b93b-6ce6028a9a73" class="collapse" aria-labelledby="requests-d3c3265e-867f-4d4f-b93b-6ce6028a9a73">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Description</h5>
+                                        <div class="dyn-height">
+                                            <code class="renderMarkdown">**Cas de test pour la requête List books :**
+        
+        1.Vérification de la réussite de la requête et qu’elle renvoie un status code égale a 200 ok.
+        
+        2.Vérification de la réponse (envoyer une recherche « les misérables » et avoir ce livre visible dans la réponse).
+        
+        3.Vérification de la réponse (envoyer une recherche « les misérables » et avoir ce livre visible en premier rang).
+        
+        4.Vérification que le total des livres renvoyés soit supérieur à 0 (totalItems diffèrent de 0).
+        
+        5.Vérification que le livre « les misérables » a bien un ID.
+        
+        6.Vérification du paramètre maxResults (envoyer une requête avec 4 ouvrages et voir le résultat obtenu).
+        
+        7.Vérification que les items ne sont pas nuls.
+        
+        8.Vérification de l’ID de livre</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://www.googleapis.com/books/v1/volumes?q&#x3D;les%20mis%C3%A9rables&amp;maxResults&#x3D;4" target="_blank">https://www.googleapis.com/books/v1/volumes?q&#x3D;les%20mis%C3%A9rables&amp;maxResults&#x3D;4</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 1093ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 12.72KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td>PostmanRuntime/7.29.0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td>*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td>no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td>298c5d89-95dd-48f3-9874-b3447b8a9947</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td>www.googleapis.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td>gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td>keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td>application/json; charset&#x3D;UTF-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td>Origin</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td>X-Origin</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td>Referer</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Encoding</td>
+                                                    <td>gzip</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td>Thu, 27 Jan 2022 19:08:41 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td>ESF</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Cache-Control</td>
+                                                    <td>private</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-XSS-Protection</td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Frame-Options</td>
+                                                    <td>SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Content-Type-Options</td>
+                                                    <td>nosniff</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Alt-Svc</td>
+                                                    <td>h3&#x3D;&quot;:443&quot;; ma&#x3D;2592000,h3-29&#x3D;&quot;:443&quot;; ma&#x3D;2592000,h3-Q050&#x3D;&quot;:443&quot;; ma&#x3D;2592000,h3-Q046&#x3D;&quot;:443&quot;; ma&#x3D;2592000,h3-Q043&#x3D;&quot;:443&quot;; ma&#x3D;2592000,quic&#x3D;&quot;:443&quot;; ma&#x3D;2592000; v&#x3D;&quot;46,43&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Transfer-Encoding</td>
+                                                    <td>chunked</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-10a1bea3-9610-44ab-9941-096c005b0990" class="prettyPrint">{
+          &quot;kind&quot;: &quot;books#volumes&quot;,
+          &quot;totalItems&quot;: 1959,
+          &quot;items&quot;: [
+            {
+              &quot;kind&quot;: &quot;books#volume&quot;,
+              &quot;id&quot;: &quot;aI5euQEACAAJ&quot;,
+              &quot;etag&quot;: &quot;WzsrYftg/TQ&quot;,
+              &quot;selfLink&quot;: &quot;https://www.googleapis.com/books/v1/volumes/aI5euQEACAAJ&quot;,
+              &quot;volumeInfo&quot;: {
+                &quot;title&quot;: &quot;Les Misérables&quot;,
+                &quot;subtitle&quot;: &quot;TV Tie-in Edition&quot;,
+                &quot;authors&quot;: [
+                  &quot;Victor Hugo&quot;
+                ],
+                &quot;publisher&quot;: &quot;BBC Books&quot;,
+                &quot;publishedDate&quot;: &quot;2018-12-27&quot;,
+                &quot;description&quot;: &quot;It is nothing to die; it is dreadful not to live Accompanying a 6-part series on BBC One from the makers of War and Peace, and starring Dominic West, Lily Collins, David Oyelowo and Olivia Coleman, this edition of Les Misérables also has a foreword from screenwriter Andrew Davies (War and Peace, Pride and Prejudice). Les Misérables is Victor Hugo&#x27;s classic tale of injustice, heroism and love following the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him. Those attempts are constantly put under threat: by his own conscience, and by the relentless investigations of the dogged policeman Javert. A compelling and compassionate view of the victims of early nineteenth-century French society, this is a novel on an epic scale, moving from the Battle of Waterloo to the the June rebellion of 1832. With striking intensity and relevance to us today, it is testimony to the struggles of France&#x27;s underclass.&quot;,
+                &quot;industryIdentifiers&quot;: [
+                  {
+                    &quot;type&quot;: &quot;ISBN_10&quot;,
+                    &quot;identifier&quot;: &quot;1785944002&quot;
+                  },
+                  {
+                    &quot;type&quot;: &quot;ISBN_13&quot;,
+                    &quot;identifier&quot;: &quot;9781785944000&quot;
+                  }
+                ],
+                &quot;readingModes&quot;: {
+                  &quot;text&quot;: false,
+                  &quot;image&quot;: false
+                },
+                &quot;pageCount&quot;: 1328,
+                &quot;printType&quot;: &quot;BOOK&quot;,
+                &quot;maturityRating&quot;: &quot;NOT_MATURE&quot;,
+                &quot;allowAnonLogging&quot;: false,
+                &quot;contentVersion&quot;: &quot;preview-1.0.0&quot;,
+                &quot;panelizationSummary&quot;: {
+                  &quot;containsEpubBubbles&quot;: false,
+                  &quot;containsImageBubbles&quot;: false
+                },
+                &quot;imageLinks&quot;: {
+                  &quot;smallThumbnail&quot;: &quot;http://books.google.com/books/content?id&#x3D;aI5euQEACAAJ&amp;printsec&#x3D;frontcover&amp;img&#x3D;1&amp;zoom&#x3D;5&amp;source&#x3D;gbs_api&quot;,
+                  &quot;thumbnail&quot;: &quot;http://books.google.com/books/content?id&#x3D;aI5euQEACAAJ&amp;printsec&#x3D;frontcover&amp;img&#x3D;1&amp;zoom&#x3D;1&amp;source&#x3D;gbs_api&quot;
+                },
+                &quot;language&quot;: &quot;en&quot;,
+                &quot;previewLink&quot;: &quot;http://books.google.co.uk/books?id&#x3D;aI5euQEACAAJ&amp;dq&#x3D;les+mis%C3%A9rables&amp;hl&#x3D;&amp;cd&#x3D;1&amp;source&#x3D;gbs_api&quot;,
+                &quot;infoLink&quot;: &quot;http://books.google.co.uk/books?id&#x3D;aI5euQEACAAJ&amp;dq&#x3D;les+mis%C3%A9rables&amp;hl&#x3D;&amp;source&#x3D;gbs_api&quot;,
+                &quot;canonicalVolumeLink&quot;: &quot;https://books.google.com/books/about/Les_Mis%C3%A9rables.html?hl&#x3D;&amp;id&#x3D;aI5euQEACAAJ&quot;
+              },
+              &quot;saleInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;saleability&quot;: &quot;NOT_FOR_SALE&quot;,
+                &quot;isEbook&quot;: false
+              },
+              &quot;accessInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;viewability&quot;: &quot;NO_PAGES&quot;,
+                &quot;embeddable&quot;: false,
+                &quot;publicDomain&quot;: false,
+                &quot;textToSpeechPermission&quot;: &quot;ALLOWED&quot;,
+                &quot;epub&quot;: {
+                  &quot;isAvailable&quot;: false
+                },
+                &quot;pdf&quot;: {
+                  &quot;isAvailable&quot;: false
+                },
+                &quot;webReaderLink&quot;: &quot;http://play.google.com/books/reader?id&#x3D;aI5euQEACAAJ&amp;hl&#x3D;&amp;printsec&#x3D;frontcover&amp;source&#x3D;gbs_api&quot;,
+                &quot;accessViewStatus&quot;: &quot;NONE&quot;,
+                &quot;quoteSharingAllowed&quot;: false
+              },
+              &quot;searchInfo&quot;: {
+                &quot;textSnippet&quot;: &quot;Victor Hugo&amp;#39;s tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.&quot;
+              }
+            },
+            {
+              &quot;kind&quot;: &quot;books#volume&quot;,
+              &quot;id&quot;: &quot;6g7fnDOiLZoC&quot;,
+              &quot;etag&quot;: &quot;Wip7emfjZ0Q&quot;,
+              &quot;selfLink&quot;: &quot;https://www.googleapis.com/books/v1/volumes/6g7fnDOiLZoC&quot;,
+              &quot;volumeInfo&quot;: {
+                &quot;title&quot;: &quot;Les Miserables&quot;,
+                &quot;authors&quot;: [
+                  &quot;Victor Hugo&quot;
+                ],
+                &quot;publisher&quot;: &quot;Penguin UK&quot;,
+                &quot;publishedDate&quot;: &quot;2003-04-24&quot;,
+                &quot;description&quot;: &quot;Victor Hugo&#x27;s tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him. But his attempts to become a respected member of the community are constantly put under threat: by his own conscience, when, owing to a case of mistaken identity, another man is arrested in his place; and by the relentless investigations of the dogged policeman Javert. It is not simply for himself that Valjean must stay free, however, for he has sworn to protect the baby daughter of Fantine, driven to prostitution by poverty. A compelling and compassionate view of the victims of early nineteenth-century French society, Les Misérables is a novel on an epic scale.&quot;,
+                &quot;industryIdentifiers&quot;: [
+                  {
+                    &quot;type&quot;: &quot;ISBN_13&quot;,
+                    &quot;identifier&quot;: &quot;9780141921518&quot;
+                  },
+                  {
+                    &quot;type&quot;: &quot;ISBN_10&quot;,
+                    &quot;identifier&quot;: &quot;014192151X&quot;
+                  }
+                ],
+                &quot;readingModes&quot;: {
+                  &quot;text&quot;: true,
+                  &quot;image&quot;: false
+                },
+                &quot;pageCount&quot;: 1232,
+                &quot;printType&quot;: &quot;BOOK&quot;,
+                &quot;categories&quot;: [
+                  &quot;Fiction&quot;
+                ],
+                &quot;averageRating&quot;: 4,
+                &quot;ratingsCount&quot;: 5,
+                &quot;maturityRating&quot;: &quot;NOT_MATURE&quot;,
+                &quot;allowAnonLogging&quot;: true,
+                &quot;contentVersion&quot;: &quot;3.14.14.0.preview.2&quot;,
+                &quot;panelizationSummary&quot;: {
+                  &quot;containsEpubBubbles&quot;: false,
+                  &quot;containsImageBubbles&quot;: false
+                },
+                &quot;imageLinks&quot;: {
+                  &quot;smallThumbnail&quot;: &quot;http://books.google.com/books/content?id&#x3D;6g7fnDOiLZoC&amp;printsec&#x3D;frontcover&amp;img&#x3D;1&amp;zoom&#x3D;5&amp;edge&#x3D;curl&amp;source&#x3D;gbs_api&quot;,
+                  &quot;thumbnail&quot;: &quot;http://books.google.com/books/content?id&#x3D;6g7fnDOiLZoC&amp;printsec&#x3D;frontcover&amp;img&#x3D;1&amp;zoom&#x3D;1&amp;edge&#x3D;curl&amp;source&#x3D;gbs_api&quot;
+                },
+                &quot;language&quot;: &quot;en&quot;,
+                &quot;previewLink&quot;: &quot;http://books.google.co.uk/books?id&#x3D;6g7fnDOiLZoC&amp;printsec&#x3D;frontcover&amp;dq&#x3D;les+mis%C3%A9rables&amp;hl&#x3D;&amp;cd&#x3D;2&amp;source&#x3D;gbs_api&quot;,
+                &quot;infoLink&quot;: &quot;http://books.google.co.uk/books?id&#x3D;6g7fnDOiLZoC&amp;dq&#x3D;les+mis%C3%A9rables&amp;hl&#x3D;&amp;source&#x3D;gbs_api&quot;,
+                &quot;canonicalVolumeLink&quot;: &quot;https://books.google.com/books/about/Les_Miserables.html?hl&#x3D;&amp;id&#x3D;6g7fnDOiLZoC&quot;
+              },
+              &quot;saleInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;saleability&quot;: &quot;NOT_FOR_SALE&quot;,
+                &quot;isEbook&quot;: false
+              },
+              &quot;accessInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;viewability&quot;: &quot;PARTIAL&quot;,
+                &quot;embeddable&quot;: true,
+                &quot;publicDomain&quot;: false,
+                &quot;textToSpeechPermission&quot;: &quot;ALLOWED&quot;,
+                &quot;epub&quot;: {
+                  &quot;isAvailable&quot;: true,
+                  &quot;acsTokenLink&quot;: &quot;http://books.google.co.uk/books/download/Les_Miserables-sample-epub.acsm?id&#x3D;6g7fnDOiLZoC&amp;format&#x3D;epub&amp;output&#x3D;acs4_fulfillment_token&amp;dl_type&#x3D;sample&amp;source&#x3D;gbs_api&quot;
+                },
+                &quot;pdf&quot;: {
+                  &quot;isAvailable&quot;: false
+                },
+                &quot;webReaderLink&quot;: &quot;http://play.google.com/books/reader?id&#x3D;6g7fnDOiLZoC&amp;hl&#x3D;&amp;printsec&#x3D;frontcover&amp;source&#x3D;gbs_api&quot;,
+                &quot;accessViewStatus&quot;: &quot;SAMPLE&quot;,
+                &quot;quoteSharingAllowed&quot;: false
+              },
+              &quot;searchInfo&quot;: {
+                &quot;textSnippet&quot;: &quot;Victor Hugo&amp;#39;s tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.&quot;
+              }
+            },
+            {
+              &quot;kind&quot;: &quot;books#volume&quot;,
+              &quot;id&quot;: &quot;WsNJAQAAMAAJ&quot;,
+              &quot;etag&quot;: &quot;H64ZgNb34IM&quot;,
+              &quot;selfLink&quot;: &quot;https://www.googleapis.com/books/v1/volumes/WsNJAQAAMAAJ&quot;,
+              &quot;volumeInfo&quot;: {
+                &quot;title&quot;: &quot;Les Misérables&quot;,
+                &quot;authors&quot;: [
+                  &quot;Victor Hugo&quot;
+                ],
+                &quot;publishedDate&quot;: &quot;1888&quot;,
+                &quot;industryIdentifiers&quot;: [
+                  {
+                    &quot;type&quot;: &quot;OTHER&quot;,
+                    &quot;identifier&quot;: &quot;MINN:31951D008328221&quot;
+                  }
+                ],
+                &quot;readingModes&quot;: {
+                  &quot;text&quot;: false,
+                  &quot;image&quot;: true
+                },
+                &quot;printType&quot;: &quot;BOOK&quot;,
+                &quot;maturityRating&quot;: &quot;NOT_MATURE&quot;,
+                &quot;allowAnonLogging&quot;: false,
+                &quot;contentVersion&quot;: &quot;0.1.4.0.full.1&quot;,
+                &quot;panelizationSummary&quot;: {
+                  &quot;containsEpubBubbles&quot;: false,
+                  &quot;containsImageBubbles&quot;: false
+                },
+                &quot;imageLinks&quot;: {
+                  &quot;smallThumbnail&quot;: &quot;http://books.google.com/books/content?id&#x3D;WsNJAQAAMAAJ&amp;printsec&#x3D;frontcover&amp;img&#x3D;1&amp;zoom&#x3D;5&amp;edge&#x3D;curl&amp;source&#x3D;gbs_api&quot;,
+                  &quot;thumbnail&quot;: &quot;http://books.google.com/books/content?id&#x3D;WsNJAQAAMAAJ&amp;printsec&#x3D;frontcover&amp;img&#x3D;1&amp;zoom&#x3D;1&amp;edge&#x3D;curl&amp;source&#x3D;gbs_api&quot;
+                },
+                &quot;language&quot;: &quot;en&quot;,
+                &quot;previewLink&quot;: &quot;http://books.google.co.uk/books?id&#x3D;WsNJAQAAMAAJ&amp;printsec&#x3D;frontcover&amp;dq&#x3D;les+mis%C3%A9rables&amp;hl&#x3D;&amp;cd&#x3D;3&amp;source&#x3D;gbs_api&quot;,
+                &quot;infoLink&quot;: &quot;https://play.google.com/store/books/details?id&#x3D;WsNJAQAAMAAJ&amp;source&#x3D;gbs_api&quot;,
+                &quot;canonicalVolumeLink&quot;: &quot;https://play.google.com/store/books/details?id&#x3D;WsNJAQAAMAAJ&quot;
+              },
+              &quot;saleInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;saleability&quot;: &quot;FREE&quot;,
+                &quot;isEbook&quot;: true,
+                &quot;buyLink&quot;: &quot;https://play.google.com/store/books/details?id&#x3D;WsNJAQAAMAAJ&amp;rdid&#x3D;book-WsNJAQAAMAAJ&amp;rdot&#x3D;1&amp;source&#x3D;gbs_api&quot;
+              },
+              &quot;accessInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;viewability&quot;: &quot;ALL_PAGES&quot;,
+                &quot;embeddable&quot;: true,
+                &quot;publicDomain&quot;: true,
+                &quot;textToSpeechPermission&quot;: &quot;ALLOWED&quot;,
+                &quot;epub&quot;: {
+                  &quot;isAvailable&quot;: false,
+                  &quot;downloadLink&quot;: &quot;http://books.google.co.uk/books/download/Les_Mis%C3%A9rables.epub?id&#x3D;WsNJAQAAMAAJ&amp;hl&#x3D;&amp;output&#x3D;epub&amp;source&#x3D;gbs_api&quot;
+                },
+                &quot;pdf&quot;: {
+                  &quot;isAvailable&quot;: false
+                },
+                &quot;webReaderLink&quot;: &quot;http://play.google.com/books/reader?id&#x3D;WsNJAQAAMAAJ&amp;hl&#x3D;&amp;printsec&#x3D;frontcover&amp;source&#x3D;gbs_api&quot;,
+                &quot;accessViewStatus&quot;: &quot;FULL_PUBLIC_DOMAIN&quot;,
+                &quot;quoteSharingAllowed&quot;: false
+              }
+            },
+            {
+              &quot;kind&quot;: &quot;books#volume&quot;,
+              &quot;id&quot;: &quot;3UAIEAAAQBAJ&quot;,
+              &quot;etag&quot;: &quot;qH3OEBauhLQ&quot;,
+              &quot;selfLink&quot;: &quot;https://www.googleapis.com/books/v1/volumes/3UAIEAAAQBAJ&quot;,
+              &quot;volumeInfo&quot;: {
+                &quot;title&quot;: &quot;Les Miserables: An Engaging Visual Journey&quot;,
+                &quot;authors&quot;: [
+                  &quot;Victor Hugo&quot;
+                ],
+                &quot;publishedDate&quot;: &quot;2021-02-09&quot;,
+                &quot;description&quot;: &quot;Les Misérables is a story of compassion, forgiveness, justice, and the will to survive amid the shadow of turmoil and revolution. For the first time, Victor Hugo&#x27;s masterpiece is a mixed-media special edition complete with French-inspired watercolor paintings, decorative hand-lettering, vintage imagery, and space for journaling and reflection. As you read and connect with this unique, artfully-designed Visual Journey, its pages become a canvas on which to chronicle your own story, struggles, and personal triumphs. Since its first publication in 1862, Les Misérables has inspired millions of people to embrace sacrificial agape love and kindness, and to extend care and compassion to the poor and marginalized. Abridged edition.&quot;,
+                &quot;industryIdentifiers&quot;: [
+                  {
+                    &quot;type&quot;: &quot;ISBN_13&quot;,
+                    &quot;identifier&quot;: &quot;9781496442963&quot;
+                  },
+                  {
+                    &quot;type&quot;: &quot;ISBN_10&quot;,
+                    &quot;identifier&quot;: &quot;1496442962&quot;
+                  }
+                ],
+                &quot;readingModes&quot;: {
+                  &quot;text&quot;: false,
+                  &quot;image&quot;: false
+                },
+                &quot;pageCount&quot;: 176,
+                &quot;printType&quot;: &quot;BOOK&quot;,
+                &quot;categories&quot;: [
+                  &quot;Fiction&quot;
+                ],
+                &quot;maturityRating&quot;: &quot;NOT_MATURE&quot;,
+                &quot;allowAnonLogging&quot;: false,
+                &quot;contentVersion&quot;: &quot;preview-1.0.0&quot;,
+                &quot;panelizationSummary&quot;: {
+                  &quot;containsEpubBubbles&quot;: false,
+                  &quot;containsImageBubbles&quot;: false
+                },
+                &quot;imageLinks&quot;: {
+                  &quot;smallThumbnail&quot;: &quot;http://books.google.com/books/content?id&#x3D;3UAIEAAAQBAJ&amp;printsec&#x3D;frontcover&amp;img&#x3D;1&amp;zoom&#x3D;5&amp;edge&#x3D;curl&amp;source&#x3D;gbs_api&quot;,
+                  &quot;thumbnail&quot;: &quot;http://books.google.com/books/content?id&#x3D;3UAIEAAAQBAJ&amp;printsec&#x3D;frontcover&amp;img&#x3D;1&amp;zoom&#x3D;1&amp;edge&#x3D;curl&amp;source&#x3D;gbs_api&quot;
+                },
+                &quot;language&quot;: &quot;en&quot;,
+                &quot;previewLink&quot;: &quot;http://books.google.co.uk/books?id&#x3D;3UAIEAAAQBAJ&amp;printsec&#x3D;frontcover&amp;dq&#x3D;les+mis%C3%A9rables&amp;hl&#x3D;&amp;cd&#x3D;4&amp;source&#x3D;gbs_api&quot;,
+                &quot;infoLink&quot;: &quot;http://books.google.co.uk/books?id&#x3D;3UAIEAAAQBAJ&amp;dq&#x3D;les+mis%C3%A9rables&amp;hl&#x3D;&amp;source&#x3D;gbs_api&quot;,
+                &quot;canonicalVolumeLink&quot;: &quot;https://books.google.com/books/about/Les_Miserables_An_Engaging_Visual_Journe.html?hl&#x3D;&amp;id&#x3D;3UAIEAAAQBAJ&quot;
+              },
+              &quot;saleInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;saleability&quot;: &quot;NOT_FOR_SALE&quot;,
+                &quot;isEbook&quot;: false
+              },
+              &quot;accessInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;viewability&quot;: &quot;PARTIAL&quot;,
+                &quot;embeddable&quot;: true,
+                &quot;publicDomain&quot;: false,
+                &quot;textToSpeechPermission&quot;: &quot;ALLOWED&quot;,
+                &quot;epub&quot;: {
+                  &quot;isAvailable&quot;: false
+                },
+                &quot;pdf&quot;: {
+                  &quot;isAvailable&quot;: false
+                },
+                &quot;webReaderLink&quot;: &quot;http://play.google.com/books/reader?id&#x3D;3UAIEAAAQBAJ&amp;hl&#x3D;&amp;printsec&#x3D;frontcover&amp;source&#x3D;gbs_api&quot;,
+                &quot;accessViewStatus&quot;: &quot;SAMPLE&quot;,
+                &quot;quoteSharingAllowed&quot;: false
+              },
+              &quot;searchInfo&quot;: {
+                &quot;textSnippet&quot;: &quot;For the first time, Victor Hugo&amp;#39;s masterpiece is a mixed-media special edition complete with French-inspired watercolor paintings, decorative hand-lettering, vintage imagery, and space for journaling and reflection.&quot;
+              }
+            }
+          ]
+        }
+        </code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-10a1bea3-9610-44ab-9941-096c005b0990">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table id="myTable-10a1bea3-9610-44ab-9941-096c005b0990" class="table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Status code is 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >vérifier la présence du livre les misérables dans la réponse</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Vérifier la présence du livre Les misérables en premier rang</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Vérifier que le total des livres renvoyés est supérieur à 0</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Vérifier que le livre « les misérables » a bien un ID</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Vérifier que le paramètre maxResults renvoye le nombre demandé au moment de la requête</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Vérifier que les items ne sont pas nuls</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Vérifir que l’ID de livre</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">8</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-7c00a75e-7725-4f5a-a09f-63d57efabb92" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-7c00a75e-7725-4f5a-a09f-63d57efabb92" aria-expanded="false" aria-controls="collapse" id="requests-7c00a75e-7725-4f5a-a09f-63d57efabb92" class="collapsed text-white z-block">
+                    Iteration: 1 - Get book <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-7c00a75e-7725-4f5a-a09f-63d57efabb92" class="collapse" aria-labelledby="requests-7c00a75e-7725-4f5a-a09f-63d57efabb92">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Description</h5>
+                                        <div class="dyn-height">
+                                            <code class="renderMarkdown">**Cas de test pour la requête Get book :**
+        
+        1.Vérification de la réussite de la requête et qu’elle renvoie un code 200 et statut ok
+        
+        2.Vérification de l’ID de livre (id&#x3D; FNrAoQEACAAJ)
+        
+        3.Vérification de l’auteur (auteur&#x3D; Victor Hugo)
+        
+        4.Vérification que le total des livres (totalItems) renvoyés soit supérieur à 0</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://www.googleapis.com/books/v1/volumes?q&#x3D;aI5euQEACAAJ" target="_blank">https://www.googleapis.com/books/v1/volumes?q&#x3D;aI5euQEACAAJ</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 431ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 5.86KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td>PostmanRuntime/7.29.0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td>*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td>no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td>083475af-dd26-4705-94a1-f86af652f22e</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td>www.googleapis.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td>gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td>keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td>application/json; charset&#x3D;UTF-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td>Origin</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td>X-Origin</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td>Referer</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Encoding</td>
+                                                    <td>gzip</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td>Thu, 27 Jan 2022 19:08:42 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td>ESF</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Cache-Control</td>
+                                                    <td>private</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-XSS-Protection</td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Frame-Options</td>
+                                                    <td>SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Content-Type-Options</td>
+                                                    <td>nosniff</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Alt-Svc</td>
+                                                    <td>h3&#x3D;&quot;:443&quot;; ma&#x3D;2592000,h3-29&#x3D;&quot;:443&quot;; ma&#x3D;2592000,h3-Q050&#x3D;&quot;:443&quot;; ma&#x3D;2592000,h3-Q046&#x3D;&quot;:443&quot;; ma&#x3D;2592000,h3-Q043&#x3D;&quot;:443&quot;; ma&#x3D;2592000,quic&#x3D;&quot;:443&quot;; ma&#x3D;2592000; v&#x3D;&quot;46,43&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Transfer-Encoding</td>
+                                                    <td>chunked</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-7d07b8bb-a7ef-4726-bd46-f5e8fadb2bcc" class="prettyPrint">{
+          &quot;kind&quot;: &quot;books#volumes&quot;,
+          &quot;totalItems&quot;: 2,
+          &quot;items&quot;: [
+            {
+              &quot;kind&quot;: &quot;books#volume&quot;,
+              &quot;id&quot;: &quot;aI5euQEACAAJ&quot;,
+              &quot;etag&quot;: &quot;YTngtdNc6wA&quot;,
+              &quot;selfLink&quot;: &quot;https://www.googleapis.com/books/v1/volumes/aI5euQEACAAJ&quot;,
+              &quot;volumeInfo&quot;: {
+                &quot;title&quot;: &quot;Les Misérables&quot;,
+                &quot;subtitle&quot;: &quot;TV Tie-in Edition&quot;,
+                &quot;authors&quot;: [
+                  &quot;Victor Hugo&quot;
+                ],
+                &quot;publisher&quot;: &quot;BBC Books&quot;,
+                &quot;publishedDate&quot;: &quot;2018-12-27&quot;,
+                &quot;description&quot;: &quot;It is nothing to die; it is dreadful not to live Accompanying a 6-part series on BBC One from the makers of War and Peace, and starring Dominic West, Lily Collins, David Oyelowo and Olivia Coleman, this edition of Les Misérables also has a foreword from screenwriter Andrew Davies (War and Peace, Pride and Prejudice). Les Misérables is Victor Hugo&#x27;s classic tale of injustice, heroism and love following the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him. Those attempts are constantly put under threat: by his own conscience, and by the relentless investigations of the dogged policeman Javert. A compelling and compassionate view of the victims of early nineteenth-century French society, this is a novel on an epic scale, moving from the Battle of Waterloo to the the June rebellion of 1832. With striking intensity and relevance to us today, it is testimony to the struggles of France&#x27;s underclass.&quot;,
+                &quot;industryIdentifiers&quot;: [
+                  {
+                    &quot;type&quot;: &quot;ISBN_10&quot;,
+                    &quot;identifier&quot;: &quot;1785944002&quot;
+                  },
+                  {
+                    &quot;type&quot;: &quot;ISBN_13&quot;,
+                    &quot;identifier&quot;: &quot;9781785944000&quot;
+                  }
+                ],
+                &quot;readingModes&quot;: {
+                  &quot;text&quot;: false,
+                  &quot;image&quot;: false
+                },
+                &quot;pageCount&quot;: 1328,
+                &quot;printType&quot;: &quot;BOOK&quot;,
+                &quot;maturityRating&quot;: &quot;NOT_MATURE&quot;,
+                &quot;allowAnonLogging&quot;: false,
+                &quot;contentVersion&quot;: &quot;preview-1.0.0&quot;,
+                &quot;panelizationSummary&quot;: {
+                  &quot;containsEpubBubbles&quot;: false,
+                  &quot;containsImageBubbles&quot;: false
+                },
+                &quot;imageLinks&quot;: {
+                  &quot;smallThumbnail&quot;: &quot;http://books.google.com/books/content?id&#x3D;aI5euQEACAAJ&amp;printsec&#x3D;frontcover&amp;img&#x3D;1&amp;zoom&#x3D;5&amp;source&#x3D;gbs_api&quot;,
+                  &quot;thumbnail&quot;: &quot;http://books.google.com/books/content?id&#x3D;aI5euQEACAAJ&amp;printsec&#x3D;frontcover&amp;img&#x3D;1&amp;zoom&#x3D;1&amp;source&#x3D;gbs_api&quot;
+                },
+                &quot;language&quot;: &quot;en&quot;,
+                &quot;previewLink&quot;: &quot;http://books.google.co.uk/books?id&#x3D;aI5euQEACAAJ&amp;dq&#x3D;aI5euQEACAAJ&amp;hl&#x3D;&amp;cd&#x3D;1&amp;source&#x3D;gbs_api&quot;,
+                &quot;infoLink&quot;: &quot;http://books.google.co.uk/books?id&#x3D;aI5euQEACAAJ&amp;dq&#x3D;aI5euQEACAAJ&amp;hl&#x3D;&amp;source&#x3D;gbs_api&quot;,
+                &quot;canonicalVolumeLink&quot;: &quot;https://books.google.com/books/about/Les_Mis%C3%A9rables.html?hl&#x3D;&amp;id&#x3D;aI5euQEACAAJ&quot;
+              },
+              &quot;saleInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;saleability&quot;: &quot;NOT_FOR_SALE&quot;,
+                &quot;isEbook&quot;: false
+              },
+              &quot;accessInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;viewability&quot;: &quot;NO_PAGES&quot;,
+                &quot;embeddable&quot;: false,
+                &quot;publicDomain&quot;: false,
+                &quot;textToSpeechPermission&quot;: &quot;ALLOWED&quot;,
+                &quot;epub&quot;: {
+                  &quot;isAvailable&quot;: false
+                },
+                &quot;pdf&quot;: {
+                  &quot;isAvailable&quot;: false
+                },
+                &quot;webReaderLink&quot;: &quot;http://play.google.com/books/reader?id&#x3D;aI5euQEACAAJ&amp;hl&#x3D;&amp;printsec&#x3D;frontcover&amp;source&#x3D;gbs_api&quot;,
+                &quot;accessViewStatus&quot;: &quot;NONE&quot;,
+                &quot;quoteSharingAllowed&quot;: false
+              },
+              &quot;searchInfo&quot;: {
+                &quot;textSnippet&quot;: &quot;Victor Hugo&amp;#39;s tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.&quot;
+              }
+            },
+            {
+              &quot;kind&quot;: &quot;books#volume&quot;,
+              &quot;id&quot;: &quot;AI5EuQEACAAJ&quot;,
+              &quot;etag&quot;: &quot;zIXl/uWxGSY&quot;,
+              &quot;selfLink&quot;: &quot;https://www.googleapis.com/books/v1/volumes/AI5EuQEACAAJ&quot;,
+              &quot;volumeInfo&quot;: {
+                &quot;title&quot;: &quot;Comic Journal Five&quot;,
+                &quot;authors&quot;: [
+                  &quot;Pot Designs&quot;
+                ],
+                &quot;publishedDate&quot;: &quot;2018-06-24&quot;,
+                &quot;description&quot;: &quot;Simple journal to document your thoughts, mark down the days tasks or merely doodle away. Matte Cover, 6x9, color both sides, lined interior pages. Never to early to start thinking of Holiday Gifts!&quot;,
+                &quot;industryIdentifiers&quot;: [
+                  {
+                    &quot;type&quot;: &quot;ISBN_10&quot;,
+                    &quot;identifier&quot;: &quot;1721822208&quot;
+                  },
+                  {
+                    &quot;type&quot;: &quot;ISBN_13&quot;,
+                    &quot;identifier&quot;: &quot;9781721822201&quot;
+                  }
+                ],
+                &quot;readingModes&quot;: {
+                  &quot;text&quot;: false,
+                  &quot;image&quot;: false
+                },
+                &quot;pageCount&quot;: 130,
+                &quot;printType&quot;: &quot;BOOK&quot;,
+                &quot;maturityRating&quot;: &quot;NOT_MATURE&quot;,
+                &quot;allowAnonLogging&quot;: false,
+                &quot;contentVersion&quot;: &quot;preview-1.0.0&quot;,
+                &quot;panelizationSummary&quot;: {
+                  &quot;containsEpubBubbles&quot;: false,
+                  &quot;containsImageBubbles&quot;: false
+                },
+                &quot;language&quot;: &quot;en&quot;,
+                &quot;previewLink&quot;: &quot;http://books.google.co.uk/books?id&#x3D;AI5EuQEACAAJ&amp;dq&#x3D;aI5euQEACAAJ&amp;hl&#x3D;&amp;cd&#x3D;2&amp;source&#x3D;gbs_api&quot;,
+                &quot;infoLink&quot;: &quot;http://books.google.co.uk/books?id&#x3D;AI5EuQEACAAJ&amp;dq&#x3D;aI5euQEACAAJ&amp;hl&#x3D;&amp;source&#x3D;gbs_api&quot;,
+                &quot;canonicalVolumeLink&quot;: &quot;https://books.google.com/books/about/Comic_Journal_Five.html?hl&#x3D;&amp;id&#x3D;AI5EuQEACAAJ&quot;
+              },
+              &quot;saleInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;saleability&quot;: &quot;NOT_FOR_SALE&quot;,
+                &quot;isEbook&quot;: false
+              },
+              &quot;accessInfo&quot;: {
+                &quot;country&quot;: &quot;GB&quot;,
+                &quot;viewability&quot;: &quot;NO_PAGES&quot;,
+                &quot;embeddable&quot;: false,
+                &quot;publicDomain&quot;: false,
+                &quot;textToSpeechPermission&quot;: &quot;ALLOWED&quot;,
+                &quot;epub&quot;: {
+                  &quot;isAvailable&quot;: false
+                },
+                &quot;pdf&quot;: {
+                  &quot;isAvailable&quot;: false
+                },
+                &quot;webReaderLink&quot;: &quot;http://play.google.com/books/reader?id&#x3D;AI5EuQEACAAJ&amp;hl&#x3D;&amp;printsec&#x3D;frontcover&amp;source&#x3D;gbs_api&quot;,
+                &quot;accessViewStatus&quot;: &quot;NONE&quot;,
+                &quot;quoteSharingAllowed&quot;: false
+              },
+              &quot;searchInfo&quot;: {
+                &quot;textSnippet&quot;: &quot;Simple journal to document your thoughts, mark down the days tasks or merely doodle away. Matte Cover, 6x9, color both sides, lined interior pages. Never to early to start thinking of Holiday Gifts!&quot;
+              }
+            }
+          ]
+        }
+        </code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-7d07b8bb-a7ef-4726-bd46-f5e8fadb2bcc">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table id="myTable-7d07b8bb-a7ef-4726-bd46-f5e8fadb2bcc" class="table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Status code is 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Vérifir que l’ID de livre</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Vérifir que l&#x27;auteur est Victor Hugo</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Vérifier que le total des livres renvoyés est supérieur à 0</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">4</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</body>
+</html>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- Data Table Configuration -->
+
+<script>
+$(document).ready( function () {
+    $('#myTable-10a1bea3-9610-44ab-9941-096c005b0990').DataTable({
+        "retrieve": true,
+        "paging": false,
+        "info": false,
+        "fixedColumns":   {
+            "heightMatch": 'none'
+        }
+    });
+});
+$(document).ready( function () {
+    $('#myTable-7d07b8bb-a7ef-4726-bd46-f5e8fadb2bcc').DataTable({
+        "retrieve": true,
+        "paging": false,
+        "info": false,
+        "fixedColumns":   {
+            "heightMatch": 'none'
+        }
+    });
+});
+</script>
+
+<!-- Tooltip Configuration -->
+
+<script>
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip({
+        trigger : 'hover'
+    })
+})
+</script>
+
+<!-- Show/Hide The Folders -->
+
+<script>
+$('#openAll').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#folder-d439f902-a126-42b9-a61d-7117a866b64c-iteration-0').removeClass('collapsed')
+            $('#folder-collapse-d439f902-a126-42b9-a61d-7117a866b64c-iteration-0').addClass('show')
+        $('#openAll').html("Collapse Folders");
+        break;
+    case 2:
+            $('#folder-d439f902-a126-42b9-a61d-7117a866b64c-iteration-0').addClass('collapsed')
+            $('#folder-collapse-d439f902-a126-42b9-a61d-7117a866b64c-iteration-0').removeClass('show')
+        $('#openAll').html("Expand Folders");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Requests -->
+
+<script>
+$('#openAllRequests').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#requests-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').removeClass('collapsed')
+            $('#collapse-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').removeClass('collapsed')
+            $('#requests-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').addClass('show')
+            $('#collapse-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').addClass('show')
+            $('#requests-7c00a75e-7725-4f5a-a09f-63d57efabb92').removeClass('collapsed')
+            $('#collapse-7c00a75e-7725-4f5a-a09f-63d57efabb92').removeClass('collapsed')
+            $('#requests-7c00a75e-7725-4f5a-a09f-63d57efabb92').addClass('show')
+            $('#collapse-7c00a75e-7725-4f5a-a09f-63d57efabb92').addClass('show')
+        $('#openAllRequests').html("Collapse Requests");
+        break;
+    case 2:
+            $('#requests-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').addClass('collapsed')
+            $('#collapse-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').addClass('collapsed')
+            $('#requests-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').removeClass('show')
+            $('#collapse-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').removeClass('show')
+            $('#requests-7c00a75e-7725-4f5a-a09f-63d57efabb92').addClass('collapsed')
+            $('#collapse-7c00a75e-7725-4f5a-a09f-63d57efabb92').addClass('collapsed')
+            $('#requests-7c00a75e-7725-4f5a-a09f-63d57efabb92').removeClass('show')
+            $('#collapse-7c00a75e-7725-4f5a-a09f-63d57efabb92').removeClass('show')
+        $('#openAllRequests').html("Expand Requests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Skipped Tests -->
+
+<script>
+$('#openAllSkipped').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#skipped-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').removeClass('collapsed')
+            $('#skipped-collapse-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').removeClass('collapsed')
+            $('#skipped-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').addClass('show')
+            $('#skipped-collapse-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').addClass('show')
+            $('#skipped-7c00a75e-7725-4f5a-a09f-63d57efabb92').removeClass('collapsed')
+            $('#skipped-collapse-7c00a75e-7725-4f5a-a09f-63d57efabb92').removeClass('collapsed')
+            $('#skipped-7c00a75e-7725-4f5a-a09f-63d57efabb92').addClass('show')
+            $('#skipped-collapse-7c00a75e-7725-4f5a-a09f-63d57efabb92').addClass('show')
+        $('#openAllSkipped').html("Collapse All Skipped Tests");
+        break;
+    case 2:
+            $('#skipped-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').addClass('collapsed')
+            $('#skipped-collapse-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').addClass('collapsed')
+            $('#skipped-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').removeClass('show')
+            $('#skipped-collapse-d3c3265e-867f-4d4f-b93b-6ce6028a9a73').removeClass('show')
+            $('#skipped-7c00a75e-7725-4f5a-a09f-63d57efabb92').addClass('collapsed')
+            $('#skipped-collapse-7c00a75e-7725-4f5a-a09f-63d57efabb92').addClass('collapsed')
+            $('#skipped-7c00a75e-7725-4f5a-a09f-63d57efabb92').removeClass('show')
+            $('#skipped-collapse-7c00a75e-7725-4f5a-a09f-63d57efabb92').removeClass('show')
+        $('#openAllSkipped').html("Expand All Skipped Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Failures -->
+
+<script>
+$('#openAllFailed').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+let failedItemContent
+let failedItemHeading
+switch (clickCount){
+    case 1:
+        $('#openAllFailed').html("Collapse All Failed Tests");
+        break;
+    case 2:
+        $('#openAllFailed').html("Expand All Failed Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Pretty Print the Response Body-->
+
+<script>
+function isJSON(data)
+{
+    var ret = true;
+    try {
+            JSON.parse(data);
+    }catch(e) {
+            ret = false;
+    }
+    return ret;
+}
+
+function isXML(data)
+{
+    return (data.length > 0 && data[0] === '<');
+}
+
+// see https://gist.github.com/sente/1083506/d2834134cd070dbcc08bf42ee27dabb746a1c54d#gistcomment-2254622
+function formatXML(data) {
+    const PADDING = ' '.repeat(2); // set desired indent size here
+    const reg = /(>)(<)(\/*)/g;
+    let pad = 0;
+    xml = data.replace(reg, '$1\r\n$2$3');
+
+    return xml.split('\r\n').map((node, index) => {
+        let indent = 0;
+        if (node.match(/.+<\/\w[^>]*>$/)) {
+            indent = 0;
+        } else if (node.match(/^<\/\w/) && pad > 0) {
+            pad -= 1;
+        } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+            indent = 1;
+        } else {
+            indent = 0;
+        }
+
+        pad += indent;
+        return PADDING.repeat(pad - indent) + node;
+    }).join('\r\n');
+}
+
+$(".prettyPrint").each(function () {
+        var data = $(this).text();
+        // Verify whether data is JSON
+        if(isJSON(data))
+        {
+                obj = JSON.parse(data);
+                data = JSON.stringify(obj, null, 2);
+        }
+        else if(isXML(data)) {
+            data = formatXML(data);            
+        }
+        $(this).text(data);
+});
+</script>
+
+
+<!-- Copy Response Body To Clipboard -->
+
+<script>
+    var clipboard = new ClipboardJS('.copyButton');
+
+    clipboard.on('success', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-success text-white")
+        e.trigger.textContent = '✔ Copied!';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-success text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+    clipboard.on('error', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-danger text-white")
+        e.trigger.textContent = '✗ Not Copied';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-danger text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+
+</script>
+
+<!-- Render the Description Markdown and link in the test failures -->
+
+<script>
+    const remarkable = new Remarkable();
+
+    const descriptions = document.querySelectorAll(".renderMarkdown");
+    descriptions.forEach(description => {
+        description.innerHTML = renderHtmlFromMarkdown(description.textContent);
+    });
+    function renderHtmlFromMarkdown(markdown) {
+        return remarkable.render(trim(markdown));
+    }
+    function trim(string) {
+        return string ? string.replace(/^ +| +$/gm, "") : string;
+    }
+</script>
+
+<!-- Show/Hide The Toggles When Scrolling The Page -->
+
+<script>
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("topOfRequestsScreen").style.display = "block";
+    document.getElementById("topOfFailuresScreen").style.display = "block";
+    document.getElementById("topOfSkippedScreen").style.display = "block";
+    document.getElementById("openAll").style.display = "none";
+    document.getElementById("openAllRequests").style.display = "none";
+    
+    
+  } else {
+    document.getElementById("topOfRequestsScreen").style.display = "none";
+    document.getElementById("topOfFailuresScreen").style.display = "none";
+    document.getElementById("topOfSkippedScreen").style.display = "none";
+    document.getElementById("openAll").style.display = "block";
+    document.getElementById("openAllRequests").style.display = "block";
+    
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+<!-- Creates The Iteration Tabs -->
+
+<script type="text/javascript">
+    "use strict";
+
+window.onload = function () {
+
+  // set display for all blocks of response
+  var allItems = document.querySelectorAll('[class*=iteration-]');
+  allItems.forEach(function(elem){
+    elem.style.display = 'block';
+  });
+
+   
+  let totalIterations = 1;
+   
+
+  let menu = document.querySelector('#execution-menu .nav');
+
+  for(var i = 0; i < totalIterations; i++)
+  {
+    let li = document.createElement('li');
+    li.appendChild(document.createTextNode((i + 1)));
+    li.setAttribute('id', 'iteration-' + i);
+    li.classList.add("custom-tab");
+    li.classList.add("itPassed");
+
+    li.addEventListener('click', function() {
+      //set display to none for all except row
+      let allItems = document.querySelectorAll('[class*=iteration-]:not(.row)');
+      allItems.forEach(function(elem) {
+        elem.style.display = 'none';
+      })
+
+      let allMenus = document.querySelectorAll('[id*=iteration-]');
+      allMenus.forEach(function(elem){
+        elem.style.borderBottom = 'none';
+      })
+    
+      this.style.borderBottom = 'solid 3px #032a33';
+
+      let items = document.querySelectorAll("." + this.id + ':not(.row)');
+      items.forEach(function(elem) {
+        elem.style.display = elem.style.display == 'block' ? 'none' : 'block';
+      })
+    });
+    menu.appendChild(li);
+  }
+
+  //shows first tab data
+  document.getElementById('iteration-0').click();
+  document.getElementById('iterationSelected').innerHTML = `Iteration ${document.getElementById('iteration-0').innerHTML} selected`
+
+}
+</script>
+
+<!-- Create the Selected Iteration Label -->
+
+<script>
+$(document).ready(function(){
+    $(function() {
+        $("#iterationList li").click(function() {
+            document.getElementById('iterationSelected').innerHTML = "Iteration " + this.innerHTML + " selected"
+        });
+    });
+});
+</script>
+
+<!-- Filter Action for the Iterations -->
+
+<script>
+$("#filterInput").on("input paste", function() {
+    var value = $(this).val();
+    $("#iterationList li").filter(function() {
+	    $("#showOnlyFailures").data("clickCount") ? $("#showOnlyFailures").click():null;
+        $(this).toggle($(this).text().indexOf(value) > -1)
+    });
+});
+</script>
+
+<!-- Showing the Failed Interations -->
+
+<script>
+$('#showOnlyFailures').on('click', function(e) {
+    let clickCount = $(this).data("clickCount") || 1
+	$("#filterInput").val()!="" && clickCount==1 ? $("#filterInput").val('').trigger('input'): null;
+    let selectedIteration = $('#iterationList li').filter(function () { 
+        return $(this).css('border-bottom').indexOf("solid") > -1 && $(this).hasClass('itFailed');
+    });
+    selectedIteration.length || clickCount > 1 ? null : $("#iterationList li.itFailed")[0].click()
+    $("#iterationList li.itPassed").toggle()
+    $("div.bg-success [id*=requests]").parents('[class^="row iteration-"]').toggle();
+    clickCount = clickCount > 1 ? 1 : ++clickCount;
+    clickCount > 1 ? $("#showOnlyFailures").html("Show All Iterations") : $("#showOnlyFailures").html("Show Failed Iterations");
+    $(this).data("clickCount", clickCount)     
+})
+</script>
+
+<!-- Set The Theme Of The Report -->
+
+<script>
+        function setTheme(themeName) {
+            localStorage.setItem('theme', themeName);
+            document.body.className = themeName;
+        }
+
+        function toggleTheme() {
+            if (localStorage.getItem('theme') === 'theme-light') {
+                setTheme('theme-dark');
+            } else {
+                setTheme('theme-light');
+            }
+        }
+
+        (function () {
+            if (localStorage.getItem('theme') === 'theme-light') {
+                setTheme('theme-light');
+                document.getElementById('slider').checked = false;
+            } else {
+                setTheme('theme-dark');
+                document.getElementById('slider').checked = true;
+            }
+        })();
+</script>
